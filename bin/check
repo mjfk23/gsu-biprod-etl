@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ ! -d "./vendor" ]
+then
+  >&2 echo 'Dependencies are missing. Try running "composer install".'
+  exit 1
+fi
+
+if [ ! -f "./vendor/autoload_runtime.php" ]
+then
+  >&2 echo 'Symfony Runtime is missing. Try running "composer require symfony/runtime".'
+  exit 1
+fi
+
+export DBNAME=BIPROD

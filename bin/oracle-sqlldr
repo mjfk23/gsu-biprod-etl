@@ -1,0 +1,23 @@
+#!/bin/bash
+
+source ./bin/check || exit 1
+
+if [ ! -f "./src/ETL/${1}.par" ]
+then
+  >&2 echo "File not found: ./src/ETL/${1}.par"
+  exit 1
+fi
+
+if [ ! -f "./src/ETL/${1}.ctl" ]
+then
+  >&2 echo "File not found: ./src/ETL/${1}.ctl"
+  exit 1
+fi
+
+if [ ! -f "./var/sqlldr/${1}.dat" ]
+then
+  >&2 echo "File not found: ./var/sqlldr/${1}.dat"
+  exit 1
+fi
+
+sqlldr /@${DBNAME} PARFILE=./src/ETL/${1}.par DATA=./var/sqlldr/${1}.dat

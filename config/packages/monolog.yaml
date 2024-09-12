@@ -1,0 +1,23 @@
+parameters:
+  log_path: "%kernel.logs_dir%/%kernel.environment%.log"
+  log_level: debug
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+  monolog.formatter.main:
+    class: mjfk23\Framework\Monolog\Formatter\ConsoleLogFormatter
+
+monolog:
+  handlers:
+    main:
+      type: stream
+      path: "%env(string:default:log_path:LOG_PATH)%"
+      level: "%env(string:default:log_level:LOG_LEVEL)%"
+      formatter: monolog.formatter.main
+      channels: ["!event"]
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: ["!event", "!doctrine", "!console"]

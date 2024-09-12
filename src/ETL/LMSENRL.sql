@@ -1,0 +1,94 @@
+TRUNCATE TABLE LMSENRL;
+INSERT INTO LMSENRL
+  (
+    LMSENRL_PIDM,
+    LMSENRL_TERM_CODE,
+    LMSENRL_CRN,
+    LMSENRL_SUBJ_CRSE,
+    LMSENRL_XLS_CODE,
+    LMSENRL_DEPT_CODE,
+    LMSENRL_ENROLLMENT_DATE,
+    LMSENRL_LAST_ACCESSED,
+    LMSENRL_COURSE_ID,
+    LMSENRL_COURSE_CODE,
+    LMSENRL_COURSE_NAME,
+    LMSENRL_COURSE_IS_ACTIVE,
+    LMSENRL_COURSE_IS_DELETED,
+    LMSENRL_SECTION_ID,
+    LMSENRL_SECTION_CODE,
+    LMSENRL_SECTION_NAME,
+    LMSENRL_SECTION_IS_ACTIVE,
+    LMSENRL_SECTION_IS_DELETED,
+    LMSENRL_STUDENT_ID,
+    LMSENRL_STUDENT_USERNAME,
+    LMSENRL_STUDENT_FIRST_NAME,
+    LMSENRL_STUDENT_LAST_NAME,
+    LMSENRL_STUDENT_AFFILIATIONS,
+    LMSENRL_ENROLLEDBY_ID,
+    LMSENRL_ENROLLEDBY_USERNAME,
+    LMSENRL_ENROLLEDBY_FIRST_NAME,
+    LMSENRL_ENROLLEDBY_LAST_NAME,
+    LMSENRL_ENROLLEDBY_AFFILIATIONS
+  )
+SELECT
+  StudentAccount.SisPIDM AS LMSENRL_PIDM,
+  Section.SisTermCode AS LMSENRL_TERM_CODE,
+  Section.SisCRN AS LMSENRL_CRN,
+  Section.SisSubjCrse as LMSENRL_SUBJ_CRSE,
+  CourseOffering.SisXlsCode AS LMSENRL_XLS_CODE,
+  Section.SisDeptCode AS LMSENRL_DEPT_CODE,
+  SectionEnrollment.EnrollmentDate AS LMSENRL_ENROLLMENT_DATE,
+  CourseOfferingEnrollment.LastAccessed AS LMSENRL_LAST_ACCESSED,
+  CourseOffering.OrgUnitId AS LMSENRL_COURSE_ID,
+  CourseOffering.Code AS LMSENRL_COURSE_CODE,
+  CourseOffering.Name AS LMSENRL_COURSE_NAME,
+  CourseOffering.IsActive AS LMSENRL_COURSE_IS_ACTIVE,
+  CourseOffering.IsDeleted AS LMSENRL_COURSE_IS_DELETED,
+  Section.OrgUnitId AS LMSENRL_SECTION_ID,
+  Section.Code AS LMSENRL_SECTION_CODE,
+  Section.Name AS LMSENRL_SECTION_NAME,
+  Section.IsActive AS LMSENRL_SECTION_IS_ACTIVE,
+  Section.IsDeleted AS LMSENRL_SECTION_IS_DELETED,
+  StudentAccount.UserId AS LMSENRL_STUDENT_ID,
+  StudentAccount.UserName AS LMSENRL_STUDENT_USERNAME,
+  StudentAccount.FirstName AS LMSENRL_STUDENT_FIRST_NAME,
+  StudentAccount.LastName AS LMSENRL_STUDENT_LAST_NAME,
+  StudentUser.SSOUSER_AFFILIATIONS as LMSENRL_STUDENT_AFFILIATIONS,
+  EnrolledByAccount.UserId AS LMSENRL_ENROLLEDBY_ID,
+  EnrolledByAccount.UserName AS LMSENRL_ENROLLEDBY_USERNAME,
+  EnrolledByAccount.FirstName AS LMSENRL_ENROLLEDBY_FIRST_NAME,
+  EnrolledByAccount.LastName AS LMSENRL_ENROLLEDBY_LAST_NAME,
+  EnrolledByUser.SSOUSER_AFFILIATIONS as LMSENRL_ENROLLEDBY_AFFILIATIONS
+FROM
+  SISTERM SisTerm,
+  D2L_ORGANIZATIONAL_UNIT Section,
+  D2L_USER_ENROLLMENT SectionEnrollment,
+  D2L_USER StudentAccount,
+  D2L_ORGANIZATIONAL_UNIT CourseOffering,
+  D2L_USER_ENROLLMENT CourseOfferingEnrollment,
+  D2L_USER EnrolledByAccount,
+  SSOUSER StudentUser,
+  SSOUSER EnrolledByUser
+WHERE
+  (
+    SisTerm.SISTERM_IS_PREV = 1 OR
+    SisTerm.SISTERM_IS_CURR = 1
+  ) AND
+  Section.Type = 'Section' AND
+  Section.Code LIKE 'SEC.090.%' AND
+  Section.SisTermCode = SisTerm.SISTERM_CODE AND
+  SectionEnrollment.OrgUnitId = Section.OrgUnitId AND
+  SectionEnrollment.RoleName = 'Student' AND
+  StudentAccount.UserId = SectionEnrollment.UserId AND
+  CourseOffering.OrgUnitId = Section.CourseOfferingId AND
+  CourseOfferingEnrollment.OrgUnitId = Section.CourseOfferingId AND
+  CourseOfferingEnrollment.UserId = SectionEnrollment.UserId AND
+  EnrolledByAccount.UserId(+) = SectionEnrollment.ModifiedByUserId AND
+  StudentUser.SSOUSER_CAMPUS_ID(+) = StudentAccount.UserName AND
+  EnrolledByUser.SSOUSER_CAMPUS_ID(+) = EnrolledByAccount.UserName
+;
+
+COMMIT;
+
+QUIT;
+

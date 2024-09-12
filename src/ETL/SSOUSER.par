@@ -1,0 +1,8 @@
+userid=/@BIPROD
+direct=true
+control=./src/ETL/SSOUSER.ctl
+log=./var/log/SSOUSER.sqlldr.log
+bad=./var/log/SSOUSER.sqlldr.bad.log
+discard=./var/log/SSOUSER.sqlldr.discard.log
+errors=0
+silent=all
