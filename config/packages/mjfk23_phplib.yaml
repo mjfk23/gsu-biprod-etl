@@ -7,5 +7,5 @@ services:
   mjfk23\LDAP\Connection:
     arguments:
       $uri: "%env(string:default::LDAP_URI)%"
-      $user: "%env(string:default::LDAP_USERNAME)%"
-      $pass: "%env(string:default::LDAP_PASSWORD)%"
+      $user: "%env(string:default::LDAP_USER)%"
+      $pass: "%env(string:default::LDAP_PASS)%"
