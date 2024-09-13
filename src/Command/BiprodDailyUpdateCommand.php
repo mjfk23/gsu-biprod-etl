@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand('biprod:daily-update')]
-final class BiprodDailyUpdateCommand extends BiprodHourlyUpdateCommand
+final class BiprodDailyUpdateCommand extends BiprodUpdateCommand
 {
     /** @inheritdoc */
     protected function getCommands(
@@ -17,7 +17,6 @@ final class BiprodDailyUpdateCommand extends BiprodHourlyUpdateCommand
         OutputInterface $output
     ): array {
         return [
-            ...parent::getCommands($input, $output),
             [$this->sqlplus, 'D2L_ORGANIZATIONAL_UNIT_ANCESTOR'],
             [$this->sqlplus, 'D2L_ORGANIZATIONAL_UNIT'],
             [$this->sqlplus, 'D2L_USER_ENROLLMENT'],
