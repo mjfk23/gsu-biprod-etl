@@ -24,7 +24,7 @@ final class BiprodDailyUpdateCommand extends BiprodUpdateCommand
             [$this->sqlplus, 'D2L_OUTCOME_DETAIL'],
             [$this->sqlplus, 'LMSENRL'],
             [$this->sqlplus, 'LMS_ICOLLEGE_RUBRIC_PROG'],
-            [$this->sqlplus, 'SKILL_PROGRAM'],
+            [$this->sqlplus, 'SKILL_OWNER'],
             [$this->sqlplus, 'SKILL_LEVEL'],
             [$this->sqlplus, 'SKILL_DETAIL'],
             [$this->sqlplus, 'SKILL_ASSESSMENT'],
