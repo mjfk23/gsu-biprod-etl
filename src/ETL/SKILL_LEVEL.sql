@@ -1,73 +1,28 @@
-MERGE INTO
-  SKILL_LEVEL A
-USING
-  (
-    SELECT DISTINCT
-      OutcomeScaleLevel.ScaleLevelId as SKILL_LEVEL_ID,
-      OutcomeScaleLevel.Name as SKILL_LEVEL_NAME,
-      OutcomeScaleLevel.PercentageRangeStart as SKILL_LEVEL_PCTSTART,
-      OutcomeScaleLevel.RGB as SKILL_LEVEL_RGB
-    FROM
-      D2L_OUTCOMES_SCALE_LEVEL_DEFINITION OutcomeScaleLevel
-    WHERE
-      OutcomeScaleLevel.ScaleId = (
-        SELECT
-          MIN(OutcomeScaleDefinition.ScaleId) as ScaleId 
-        FROM
-          D2L_ORGANIZATIONAL_UNIT OrgUnit,
-          D2L_OUTCOME_REGISTRY_OWNER OutcomeRegistryOwner,
-          D2L_OUTCOMES_SCALE_DEFINITION OutcomeScaleDefinition
-        WHERE
-          OrgUnit.Type = 'Organization' AND
-          OutcomeRegistryOwner.OwnerType = 1 AND
-          OutcomeRegistryOwner.OwnerId = OrgUnit.OrgUnitId AND
-          OutcomeScaleDefinition.RegistryId = OutcomeRegistryOwner.RegistryId
-        GROUP BY
-          OrgUnit.Type
-        HAVING
-          COUNT(1) = 1
-      )
-  ) B
-ON
-  (
-    A.SKILL_LEVEL_ID = B.SKILL_LEVEL_ID
-  )
-WHEN MATCHED THEN
-  UPDATE SET
-    A.SKILL_LEVEL_NAME = B.SKILL_LEVEL_NAME,
-    A.SKILL_LEVEL_PCTSTART = B.SKILL_LEVEL_PCTSTART,
-    A.SKILL_LEVEL_RGB = B.SKILL_LEVEL_RGB
-  WHERE
-    A.SKILL_LEVEL_NAME != B.SKILL_LEVEL_NAME OR
-    A.SKILL_LEVEL_PCTSTART != B.SKILL_LEVEL_PCTSTART OR
-    A.SKILL_LEVEL_RGB != B.SKILL_LEVEL_RGB
-WHEN NOT MATCHED THEN
-  INSERT
-    (
-      A.SKILL_LEVEL_ID,
-      A.SKILL_LEVEL_NAME,
-      A.SKILL_LEVEL_PCTSTART,
-      A.SKILL_LEVEL_RGB
-    )
-  VALUES
-    (
-      B.SKILL_LEVEL_ID,
-      B.SKILL_LEVEL_NAME,
-      B.SKILL_LEVEL_PCTSTART,
-      B.SKILL_LEVEL_RGB
-    )
-;
+TRUNCATE TABLE SKILL_LEVEL;
 
-DELETE FROM
-  SKILL_LEVEL
+INSERT INTO SKILL_LEVEL
+  (
+    SKILL_LEVEL_ID,
+    SKILL_LEVEL_NAME,
+    SKILL_LEVEL_PCTSTART,
+    SKILL_LEVEL_RGB
+  )
+SELECT DISTINCT
+  OutcomeScaleLevel.ScaleLevelId         AS SKILL_LEVEL_ID,
+  OutcomeScaleLevel.Name                 AS SKILL_LEVEL_NAME,
+  OutcomeScaleLevel.PercentageRangeStart AS SKILL_LEVEL_PCTSTART,
+  OutcomeScaleLevel.RGB                  AS SKILL_LEVEL_RGB
+FROM
+  D2L_OUTCOMES_SCALE_DEFINITION OutcomeScale,
+  D2L_OUTCOMES_SCALE_LEVEL_DEFINITION OutcomeScaleLevel
 WHERE
-  NOT EXISTS (
+  OutcomeScaleLevel.ScaleId = (
     SELECT
-      1
+      MIN(OutcomeScaleDefinition.ScaleId) 
     FROM
-      D2L_OUTCOMES_SCALE_LEVEL_DEFINITION OutcomeScaleLevel
+      D2L_OUTCOMES_SCALE_DEFINITION OutcomeScaleDefinition
     WHERE
-      OutcomeScaleLevel.ScaleLevelId = SKILL_LEVEL_ID
+      OutcomeScaleDefinition.IsDefault = 1
   )
 ;
 
