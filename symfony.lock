@@ -1,23 +1,71 @@
 {
-    "mjfk23/phplib": {
+    "mjfk23/gadget-console": {
         "version": "1.0",
         "recipe": {
             "repo": "github.com/mjfk23/symfony-recipes",
             "branch": "main",
             "version": "1.0",
-            "ref": "0842132536e427f32f4cb62e719806f537d3c2d5"
+            "ref": "cfe05bafc3af465689faea4ad0fa8fef07bb3467"
         },
         "files": [
-            "config/packages/mjfk23_phplib.yaml"
+            "config/packages/gadget_console.yaml"
+        ]
+    },
+    "mjfk23/gadget-core": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/mjfk23/symfony-recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "ee823375e301ef72a5af0b54a0a7935f3f72b173"
+        },
+        "files": [
+            "config/packages/gadget_core.yaml"
+        ]
+    },
+    "mjfk23/gadget-http": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/mjfk23/symfony-recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "e0c2c4c98b6c04d8754a419b0c3557ba9bbaf754"
+        },
+        "files": [
+            "config/packages/gadget_http.yaml"
+        ]
+    },
+    "mjfk23/gadget-ldap": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/mjfk23/symfony-recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "714c7f251f2cc48c1dc08265b3c87c4bcd1cb266"
+        },
+        "files": [
+            "config/packages/mjfk23_ldap.yaml"
+        ]
+    },
+    "mjfk23/gadget-log": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/mjfk23/symfony-recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "a5d9cbc47c1375193b5b6adc223dd9100400c05e"
+        },
+        "files": [
+            "config/packages/gadget_log.yaml"
         ]
     },
     "php-http/discovery": {
-        "version": "1.19",
+        "version": "1.20",
         "recipe": {
-            "repo": "github.com/symfony/recipes",
+            "repo": "github.com/mjfk23/symfony-recipes",
             "branch": "main",
-            "version": "1.18",
-            "ref": "f45b5dd173a27873ab19f5e3180b2f661c21de02"
+            "version": "1.19",
+            "ref": "4bf6c646da7ba4a5d6acc49d5f9b9fbdcdeae7b2"
         },
         "files": [
             "config/packages/http_discovery.yaml"
@@ -29,10 +77,22 @@
             "repo": "github.com/mjfk23/symfony-recipes",
             "branch": "main",
             "version": "1.0",
-            "ref": "5e490cc197fb6bb1ae22e5abbc531ddc633b6767"
+            "ref": "0da691b26c3a2ea2c0c6350cebfe3e0765cd6fdc"
         },
         "files": [
-            "phpstan.neon"
+            "phpstan.neon.dist"
+        ]
+    },
+    "phpunit/phpunit": {
+        "version": "10.5",
+        "recipe": {
+            "repo": "github.com/mjfk23/symfony-recipes",
+            "branch": "main",
+            "version": "10.0",
+            "ref": "599059e2c13caa3ef2621b85a15a3a94706a8d6a"
+        },
+        "files": [
+            "phpunit.xml.dist"
         ]
     },
     "squizlabs/php_codesniffer": {
@@ -41,10 +101,10 @@
             "repo": "github.com/mjfk23/symfony-recipes",
             "branch": "main",
             "version": "3.6",
-            "ref": "1019e5c08d4821cb9b77f4891f8e9c31ff20ac6f"
+            "ref": "8ab46c3495b0fcdfed304ba11f2fa4f3f89a98f3"
         },
         "files": [
-            "phpcs.xml"
+            "phpcs.xml.dist"
         ]
     },
     "symfony/console": {
@@ -93,10 +153,10 @@
     "symfony/monolog-bundle": {
         "version": "3.10",
         "recipe": {
-            "repo": "github.com/symfony/recipes",
+            "repo": "github.com/mjfk23/symfony-recipes",
             "branch": "main",
             "version": "3.7",
-            "ref": "aff23899c4440dd995907613c1dd709b6f59503f"
+            "ref": "9482d211d020cdffe13e7f1bfef13d1fad25c901"
         },
         "files": [
             "config/packages/monolog.yaml"

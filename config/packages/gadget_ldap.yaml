@@ -1,0 +1,11 @@
+services:
+    Gadget\LDAP\:
+        autowire: true
+        autoconfigure: true
+        resource: '%kernel.project_dir%/vendor/mjfk23/gadget-ldap/src/'
+
+    Gadget\LDAP\Connection:
+        arguments:
+            $uri: '%env(string:default::LDAP_URI)%'
+            $user: '%env(string:default::LDAP_USER)%'
+            $pass: '%env(string:default::LDAP_PASS)%'

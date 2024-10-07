@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Gsu\Biprod\Factory;
 
+use Gadget\Factory\AbstractFactory;
+use Gadget\Io\Cast;
+use Gadget\LDAP\DateFormat;
 use Gsu\Biprod\Entity\SSOUser;
-use mjfk23\Framework\Factory\AbstractFactory;
-use mjfk23\Framework\Factory\Cast;
-use mjfk23\LDAP\DateFormat;
 
 /**
  * @extends AbstractFactory<SSOUser>
@@ -20,8 +20,11 @@ final class SSOUserFactory extends AbstractFactory
     }
 
 
-    /** @inheritdoc */
-    public function create(mixed $values): object
+    /**
+     * @param mixed $values
+     * @return SSOUser
+     */
+    public function create(mixed $values): SSOUser
     {
         $values = Cast::toArray($values);
         $memberOf = Cast::toString($values['memberOf'] ?? '');

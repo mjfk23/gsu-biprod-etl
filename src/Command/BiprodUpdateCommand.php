@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Gsu\Biprod\Command;
 
-use mjfk23\Framework\Shell\AbstractShellCommand;
+use Gadget\Console\Shell\AbstractShellCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

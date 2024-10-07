@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Gsu\Biprod\Command;
 
+use Gadget\LDAP\Connection;
+use Gadget\LDAP\Query;
+use Gadget\Log\LoggerProxyInterface;
+use Gadget\Log\LoggerProxyTrait;
 use Gsu\Biprod\Entity\SSOUser;
 use Gsu\Biprod\Factory\SSOUserFactory;
-use mjfk23\LDAP\Connection;
-use mjfk23\Log\LoggerProxyInterface;
-use mjfk23\Log\LoggerProxyTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -111,17 +112,14 @@ final class SSOUserCreateFileCommand extends Command implements LoggerProxyInter
      */
     private function fetch(int $pageSize = 1000): iterable
     {
-        yield from $this->ldapConnection->forEach(
-            $this->base,
-            $this->filter,
-            $this->attributes,
-            fn($entry) => $this->ssoUserFactory->create(
-                $this->ldapConnection->fetch(
-                    $entry,
-                    $this->attributes
-                )
+        yield from $this->ldapConnection->query(
+            new Query(
+                $this->base,
+                $this->filter,
+                $this->attributes,
+                $pageSize
             ),
-            $pageSize
+            $this->ssoUserFactory->create(...)
         );
     }
 }
