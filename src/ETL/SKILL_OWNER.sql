@@ -1,0 +1,48 @@
+TRUNCATE TABLE SKILL_OWNER;
+
+INSERT INTO SKILL_OWNER
+  (
+    SKILL_OWNER_ID,
+    SKILL_OWNER_ORGUNIT_ID,
+    SKILL_OWNER_ORGUNIT_TYPE,
+    SKILL_OWNER_ORGUNIT_CODE,
+    SKILL_OWNER_ORGUNIT_NAME,
+    SKILL_OWNER_PROGRAM_ID,
+    SKILL_OWNER_PROGRAM_NAME
+  )
+SELECT
+  OutcomeRegistryOwner.RegistryId AS SKILL_OWNER_ID,
+  OrgUnit.OrgUnitId AS SKILL_OWNER_ORGUNIT_ID,
+  OrgUnit.Type AS SKILL_OWNER_ORGUNIT_TYPE,
+  OrgUnit.Code AS SKILL_OWNER_ORGUNIT_CODE,
+  OrgUnit.Name AS SKILL_OWNER_ORGUNIT_NAME,
+  OutcomeProgramDetail.ProgramId AS SKILL_OWNER_PROGRAM_ID,
+  OutcomeProgramDetail.ProgramName AS SKILL_OWNER_PROGRAM_NAME
+FROM
+  D2L_OUTCOME_REGISTRY_OWNER OutcomeRegistryOwner,
+  D2L_OUTCOMES_PROGRAM_DETAIL OutcomeProgramDetail,
+  D2L_ORGANIZATIONAL_UNIT OrgUnit
+WHERE
+  OutcomeRegistryOwner.OwnerType = 2 AND
+  OutcomeProgramDetail.ProgramId = OutcomeRegistryOwner.OwnerId AND
+  OrgUnit.OrgUnitId = OutcomeProgramDetail.OrgUnitId
+UNION
+SELECT
+  OutcomeRegistryOwner.RegistryId AS SKILL_OWNER_ID,
+  OrgUnit.OrgUnitId AS SKILL_OWNER_ORGUNIT_ID,
+  OrgUnit.Type AS SKILL_OWNER_ORGUNIT_TYPE,
+  OrgUnit.Code AS SKILL_OWNER_ORGUNIT_CODE,
+  OrgUnit.Name AS SKILL_OWNER_ORGUNIT_NAME,
+  null AS SKILL_OWNER_PROGRAM_ID,
+  null AS SKILL_OWNER_PROGRAM_NAME
+FROM
+  D2L_OUTCOME_REGISTRY_OWNER OutcomeRegistryOwner,
+  D2L_ORGANIZATIONAL_UNIT OrgUnit
+WHERE
+  OutcomeRegistryOwner.OwnerType = 1 AND
+  OrgUnit.OrgUnitId = OutcomeRegistryOwner.OwnerId
+;
+
+COMMIT;
+
+QUIT;
