@@ -1,3 +1,14 @@
+UPDATE
+  D2L_ORGANIZATIONAL_UNIT GroupSection
+SET
+  GroupSection.Type = 'Section'
+WHERE
+  GroupSection.Type = 'Group' AND
+  GroupSection.Code LIKE 'SEC.090.%'
+;
+COMMIT;
+
+
 MERGE INTO
   MFOREST.D2L_ORGANIZATIONAL_UNIT A
 USING
