@@ -76,19 +76,28 @@ final class BiprodUpdateCommand extends ShellCommand
         OutputInterface $output
     ): array {
         return array_map(fn(array $args) => new ProcessShellArgs($args), [
+            // AD
             [...$this->console, 'ssouser:create-file', './var/sqlldr/SSOUSER.dat'],
             [...$this->sqlldr, './src/ETL/SSOUSER.par', './var/sqlldr/SSOUSER.dat'],
             [...$this->sqlplus, './src/ETL/SSOUSER.sql'],
+            // SIS
             [...$this->sqlplus, './src/ETL/SISTERM.sql'],
             [...$this->sqlplus, './src/ETL/SISSECT.sql'],
             [...$this->sqlplus, './src/ETL/SISUSER.sql'],
+            // D2L
             [...$this->sqlplus, './src/ETL/D2L_ORGANIZATIONAL_UNIT_ANCESTOR.sql'],
             [...$this->sqlplus, './src/ETL/D2L_ORGANIZATIONAL_UNIT.sql'],
             [...$this->sqlplus, './src/ETL/D2L_USER_ENROLLMENT.sql'],
             [...$this->sqlplus, './src/ETL/D2L_USER.sql'],
             [...$this->sqlplus, './src/ETL/D2L_OUTCOME_DETAIL.sql'],
+            // Enrollments
             [...$this->sqlplus, './src/ETL/LMSENRL.sql'],
+            // Rubrics
+            [...$this->sqlplus, './src/ETL/BNR_STVCODE.sql'],
+            [...$this->sqlplus, './src/ETL/BNR_GORPRAC.sql'],
+            [...$this->sqlplus, './src/ETL/BNR_SGBSTDN.sql'],
             [...$this->sqlplus, './src/ETL/LMS_ICOLLEGE_RUBRIC_PROG.sql'],
+            // Learning outcomes
             [...$this->sqlplus, './src/ETL/SKILL_OWNER.sql'],
             [...$this->sqlplus, './src/ETL/SKILL_LEVEL.sql'],
             [...$this->sqlplus, './src/ETL/SKILL_DETAIL.sql'],

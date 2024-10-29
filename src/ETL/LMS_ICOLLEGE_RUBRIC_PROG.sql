@@ -1,188 +1,3 @@
-TRUNCATE TABLE LMS_ICOLLEGE_RUBRIC_PROG_BREPT;
-INSERT INTO LMS_ICOLLEGE_RUBRIC_PROG_BREPT
-  (
-    PIDM,
-    PANTHERID,
-    WHKEY,
-    META_MAJR,
-    META_MAJR_DESC,
-    STU_ENROLLED_TERM,
-    STU_COLG,
-    STU_DEPT,
-    STU_DEGR,
-    STU_MAJR,
-    STU_CONCENT,
-    STU_PROG,
-    STU_LEVEL,
-    STU_TYPE,
-    STU_PRIME_CAMP,
-    STU_SEX,
-    STU_RACE,
-    STU_PELL_IND,
-    STU_FIRST_GENERATION,
-    STU_AGE,
-    COLG_DESC,
-    DEPT_DESC,
-    DEGR_DESC,
-    MAJR_DESC,
-    CONCENT_DESC,
-    STU_LEVEL_DESC,
-    STU_TYPE_DESC,
-    PRIME_CAMP_DESC,
-    STU_LEVEL_REGENTS,
-    LEVEL_REGENTS_DESC,
-    STU_RACE_DESC,
-    STU_ETHNICITY
-  )
-SELECT
-  spriden_pidm AS pidm,
-  spriden_id AS pantherid,
-  spriden_id AS whkey,
-  null AS meta_majr,
-  null AS meta_majr_desc,
-  sgbstdn_term_code_eff AS stu_enrolled_term,
-  sgbstdn_coll_code_1 AS stu_colg,
-  sgbstdn_dept_code AS stu_dept,
-  sgbstdn_degc_code_1 AS stu_degr,
-  sgbstdn_majr_code_1 AS stu_majr,
-  sgbstdn_majr_code_conc_1 AS stu_concent,
-  sgbstdn_program_1 AS stu_prog,
-  sgbstdn_levl_code AS stu_level,
-  sgbstdn_styp_code AS stu_type,
-  sgbstdn_camp_code AS stu_prime_camp,
-  spbpers_sex AS stu_sex,
-  gorprac_race_cde AS stu_race,
-  null AS stu_pell_ind,
-  null AS stu_first_generation,
-  FLOOR((SYSDATE - spbpers_birth_date) / 365) AS stu_age,
-  (SELECT stvcoll_desc FROM stvcoll@biprod_brept_link_mforest WHERE stvcoll_code = sgbstdn_coll_code_1) AS colg_desc,
-  (SELECT stvdept_desc FROM stvdept@biprod_brept_link_mforest WHERE stvdept_code = sgbstdn_dept_code) AS dept_desc,
-  (SELECT stvdegc_desc FROM stvdegc@biprod_brept_link_mforest WHERE stvdegc_code = sgbstdn_degc_code_1) AS degr_desc,
-  (SELECT stvmajr_desc FROM stvmajr@biprod_brept_link_mforest WHERE stvmajr_code = sgbstdn_majr_code_1) AS majr_desc,
-  (SELECT stvmajr_desc FROM stvmajr@biprod_brept_link_mforest WHERE stvmajr_code = sgbstdn_majr_code_conc_1) AS concent_desc,
-  (SELECT stvlevl_desc FROM stvlevl@biprod_brept_link_mforest WHERE stvlevl_code = sgbstdn_levl_code) AS stu_level_desc,
-  (SELECT stvstyp_desc FROM stvstyp@biprod_brept_link_mforest WHERE stvstyp_code = sgbstdn_styp_code) AS stu_type_desc,
-  (SELECT stvcamp_desc FROM stvcamp@biprod_brept_link_mforest WHERE stvcamp_code = sgbstdn_camp_code) AS prime_camp_desc,
-  CASE
-    WHEN SGBSTDN_LEVL_CODE = 'VT' THEN '05'
-    WHEN SGBSTDN_LEVL_CODE IN ('FP','LW','LS','LQ') THEN '80'
-    WHEN SGBSTDN_LEVL_CODE = 'GS' AND SGBSTDN_STYP_CODE in ('K','W','ND','TRG','CERM','CERG') THEN '60'
-    WHEN SGBSTDN_LEVL_CODE = 'GS' THEN '70'
-    WHEN SGBSTDN_LEVL_CODE = 'TRN' THEN '50'
-    WHEN SGBSTDN_LEVL_CODE = 'B' THEN '51'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE = 'A' THEN '52'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE IN ('J', 'D') THEN '11'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE IN ('K', 'W') THEN '51'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE < '30' THEN '10'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND (SGBSTDN_STYP_CODE >= '30' AND SGBSTDN_STYP_CODE < '60') THEN '20'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND (SGBSTDN_STYP_CODE >= '60' AND SGBSTDN_STYP_CODE < '90') THEN '30'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE >= '90' THEN '40'
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE = 'X' THEN '50'
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE IN ('J', 'D') THEN '11'
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE IN ('B', 'N') THEN '51'
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE < '30' THEN '10'
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE >= '30' THEN '20'
-    ELSE '10'
-  END AS stu_level_regents,
-  CASE
-    WHEN SGBSTDN_LEVL_CODE = 'VT' THEN null
-    WHEN SGBSTDN_LEVL_CODE IN ('FP','LW','LS','LQ') THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'GS' AND SGBSTDN_STYP_CODE IN ('K','W','ND','TRG','CERM','CERG') THEN 'Non Degree Graduate'
-    WHEN SGBSTDN_LEVL_CODE = 'GS' THEN 'Graduate'
-    WHEN SGBSTDN_LEVL_CODE = 'TRN' THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'B' THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE = 'A' THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE IN ('J', 'D') THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE IN ('K', 'W') THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE < '30'THEN 'Freshman'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND (SGBSTDN_STYP_CODE >= '30' AND SGBSTDN_STYP_CODE < '60') THEN 'Sophomore'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND (SGBSTDN_STYP_CODE >= '60' AND SGBSTDN_STYP_CODE < '90') THEN 'Junior'
-    WHEN SGBSTDN_LEVL_CODE = 'US' AND SGBSTDN_STYP_CODE >= '90' THEN 'Senior'
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE = 'X' THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE IN ('J', 'D') THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE IN ('B', 'N') THEN null
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE < '30' THEN 'Freshman'
-    WHEN SGBSTDN_LEVL_CODE = 'UA' AND SGBSTDN_STYP_CODE >= '30' THEN 'Sophomore'
-    ELSE 'Freshman'
-  END AS level_regents_desc,
-  gorrace_desc AS stu_race_desc,
-  CASE
-    WHEN spbpers_ethn_code IS NULL OR spbpers_ethn_code IN ('O', 'N') THEN NULL
-    WHEN spbpers_ethn_code IN ('BH','WH','H') THEN 'Hispanic'
-    ELSE 'Non-Hispanic'
-  END AS stu_ethnicity
-FROM
-  (
-    select
-      spriden_pidm,
-      spriden_id,
-      sgbstdn_term_code_eff,
-      sgbstdn_coll_code_1,
-      sgbstdn_dept_code,
-      sgbstdn_degc_code_1,
-      sgbstdn_majr_code_1,
-      sgbstdn_majr_code_conc_1,
-      sgbstdn_program_1,
-      sgbstdn_levl_code,
-      sgbstdn_styp_code,
-      baninst1.f_primary_campus@biprod_brept_link_mforest(sgbstdn_pidm, sgbstdn_term_code_eff) as sgbstdn_camp_code
-    from
-      spriden@biprod_brept_link_mforest,
-      sgbstdn@biprod_brept_link_mforest
-    where
-      spriden_change_ind IS NULL AND
-      spriden_entity_ind = 'P' AND
-      sgbstdn_pidm = spriden_pidm and
-      sgbstdn_term_code_eff = (
-        SELECT
-          MAX(i.sgbstdn_term_code_eff)
-        FROM
-          sgbstdn@biprod_brept_link_mforest i
-        WHERE
-          i.sgbstdn_pidm = spriden_pidm AND
-          i.sgbstdn_term_code_eff <= (
-            select
-              min(stvterm_code)
-            from
-              stvterm@biprod_brept_link_mforest
-            where
-              stvterm_end_date + 1 > sysdate
-          )
-      )
-  ) sgbstdn,
-  spbpers@biprod_brept_link_mforest,
-  (
-    SELECT
-      gorprac_pidm,
-      min(gorprac_race_cde) AS gorprac_race_cde,
-      min(gorrace_desc) as gorrace_desc
-    FROM
-      gorprac@biprod_brept_link_mforest,
-      gorrace@biprod_brept_link_mforest
-    WHERE
-      gorrace_race_cde(+) = gorprac_race_cde
-    GROUP BY
-      gorprac_pidm
-    HAVING
-      COUNT(DISTINCT gorprac_race_cde) = 1
-    UNION
-    SELECT
-      gorprac_pidm,
-      listagg(DISTINCT gorprac_race_cde) WITHIN GROUP(ORDER BY gorprac_race_cde) AS gorprac_race_cde,
-      '2 or More Races' as gorrace_desc
-    FROM
-      gorprac@biprod_brept_link_mforest
-    GROUP BY
-      gorprac_pidm
-    HAVING
-      COUNT(DISTINCT gorprac_race_cde) > 1
-  ) gorprac
-WHERE
-  spbpers_pidm(+) = spriden_pidm and
-  gorprac_pidm(+) = spriden_pidm
-;
-
-
 TRUNCATE TABLE LMS_ICOLLEGE_RUBRIC_PROG;
 INSERT INTO LMS_ICOLLEGE_RUBRIC_PROG
   (
@@ -278,31 +93,7 @@ SELECT
   ) AS CRITERION_LEVELDESCRIPTION,
   RubricAssessmentCriteria.Feedback AS CRITERION_FEEDBACK
 FROM
-  (
-    SELECT
-      ProgramDeptOU.OrgUnitId,
-      ProgramDeptOU.Type,
-      ProgramDeptOU.Name,
-      ProgramDeptOU.Code,
-      ProgramDeptOU.StartDate,
-      ProgramDeptOU.EndDate,
-      ProgramDeptOU.IsActive,
-      ProgramDeptOU.CreatedDate
-    FROM
-      D2L_ORGANIZATIONAL_UNIT ProgramDeptOU
-    WHERE
-      ProgramDeptOU.Type IN ('Program','Department') AND
-      ProgramDeptOU.IsDeleted = 0 AND
-      ProgramDeptOU.IsActive = 1 AND
-      EXISTS (
-        SELECT
-          1
-        FROM
-          D2L_RUBRIC_OBJECT RubricObject
-        WHERE
-          RubricObject.OrgUnitID = ProgramDeptOU.OrgUnitId
-      )
-  ) ProgramDept,
+  LMS_RUBRIC_PROGRAM ProgramDept,
   D2L_RUBRIC_OBJECT RubricObject,
   D2L_RUBRIC_ASSESSMENT RubricAssessment,
   D2L_RUBRIC_ASSESSMENT_CRITERIA RubricAssessmentCriteria,
@@ -322,37 +113,72 @@ FROM
   D2L_RUBRIC_OBJECT_LEVELS CriteriaLevel
 WHERE
   -- RubricObject
-  RubricObject.OrgUnitId = ProgramDept.OrgUnitId and
+  RubricObject.OrgUnitId = ProgramDept.OrgUnitId AND
   -- RubricAssessment
-  RubricAssessment.RubricId = RubricObject.RubricId and
+  RubricAssessment.RubricId = RubricObject.RubricId AND
   -- RubricAssessmentCriteria
-  RubricAssessmentCriteria.UserId = RubricAssessment.UserId and
-  RubricAssessmentCriteria.AssessmentId = RubricAssessment.AssessmentId and
+  RubricAssessmentCriteria.UserId = RubricAssessment.UserId AND
+  RubricAssessmentCriteria.AssessmentId = RubricAssessment.AssessmentId AND
   -- CourseOffering
-  CourseOffering.OrgUnitId = RubricAssessment.OrgUnitId and
+  CourseOffering.OrgUnitId = RubricAssessment.OrgUnitId AND
   -- Semester
-  Semester.OrgUnitId = CourseOffering.SemesterId and
+  Semester.OrgUnitId = CourseOffering.SemesterId AND
   -- UserAccount
-  UserAccount.UserId = RubricAssessment.UserId and
-  UserAccount.ExternalEmail NOT LIKE 'demo.%@student.gsu.edu' and
+  UserAccount.UserId = RubricAssessment.UserId AND
+  UserAccount.ExternalEmail NOT LIKE 'demo.%@student.gsu.edu' AND
   -- RubricLevel
-  RubricLevel.LevelId = RubricAssessment.LevelAchievedId and
+  RubricLevel.LevelId = RubricAssessment.LevelAchievedId AND
   -- RubricObjectCriteria
-  RubricObjectCriteria.CriterionId = RubricAssessmentCriteria.CriterionId and
+  RubricObjectCriteria.CriterionId = RubricAssessmentCriteria.CriterionId AND
   -- CriteriaLevel
   CriteriaLevel.LevelId = RubricAssessmentCriteria.LevelAchievedId
 ;
 
+
 MERGE INTO
   LMS_ICOLLEGE_RUBRIC_PROG A
 USING
-  LMS_ICOLLEGE_RUBRIC_PROG_BREPT B
+  (
+    SELECT
+      SPRIDEN_PIDM AS PIDM,              
+      SPRIDEN_ID AS PANTHERID,
+      SGBSTDN_TERM_CODE_EFF AS STU_ENROLLED_TERM,
+      SGBSTDN_COLL_CODE_1 AS STU_COLG,
+      SGBSTDN_DEPT_CODE AS STU_DEPT,
+      SGBSTDN_DEGC_CODE_1 AS STU_DEGR,
+      SGBSTDN_MAJR_CODE_1 AS STU_MAJR,
+      SGBSTDN_MAJR_CODE_CONC_1 AS STU_CONCENT,
+      SGBSTDN_PROGRAM_1 AS STU_PROG,
+      STU_LEVEL_REGENTS AS STU_LEVEL_REGENTS,
+      SGBSTDN_LEVL_CODE AS STU_LEVEL,
+      SGBSTDN_STYP_CODE AS STU_TYPE,
+      SGBSTDN_CAMP_CODE AS STU_PRIME_CAMP,
+      SPBPERS_SEX AS STU_SEX,
+      GORPRAC_RACE_CDE AS STU_RACE,
+      SPBPERS_ETHN_CODE AS STU_ETHNICITY,
+      SPBPERS_AGE AS STU_AGE,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'STVCOLL' AND STVCODE_CODE = SGBSTDN_COLL_CODE_1) AS COLG_DESC,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'STVDEPT' AND STVCODE_CODE = SGBSTDN_DEPT_CODE) AS DEPT_DESC,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'STVDEGC' AND STVCODE_CODE = SGBSTDN_DEGC_CODE_1) AS DEGR_DESC,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'STVMAJR' AND STVCODE_CODE = SGBSTDN_MAJR_CODE_1) AS MAJR_DESC,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'STVMAJR' AND STVCODE_CODE = SGBSTDN_MAJR_CODE_CONC_1) AS CONCENT_DESC,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'USGRGNT' AND STVCODE_CODE = STU_LEVEL_REGENTS) AS LEVEL_REGENTS_DESC,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'STVLEVL' AND STVCODE_CODE = SGBSTDN_LEVL_CODE) AS STU_LEVEL_DESC,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'STVSTYP' AND STVCODE_CODE = SGBSTDN_STYP_CODE) AS STU_TYPE_DESC,
+      (SELECT STVCODE_DESC FROM BNR_STVCODE WHERE STVCODE_TABLE = 'STVCAMP' AND STVCODE_CODE = SGBSTDN_STYP_CODE) AS PRIME_CAMP_DESC,
+      GORRACE_DESC AS STU_RACE_DESC
+    FROM
+      BNR_SGBSTDN,
+      BNR_GORPRAC
+    WHERE
+      GORPRAC_PIDM(+) = SPRIDEN_PIDM
+  ) B
 ON
   (A.PIDM = B.PIDM)
 WHEN MATCHED THEN
   UPDATE SET
     A.PANTHERID            = B.PANTHERID,
-    A.WHKEY                = B.WHKEY,
+    A.WHKEY                = B.PANTHERID,
     A.STU_ENROLLED_TERM    = B.STU_ENROLLED_TERM,
     A.STU_COLG             = B.STU_COLG,
     A.COLG_DESC            = B.COLG_DESC,
@@ -362,8 +188,6 @@ WHEN MATCHED THEN
     A.DEGR_DESC            = B.DEGR_DESC,
     A.STU_MAJR             = B.STU_MAJR,
     A.MAJR_DESC            = B.MAJR_DESC,
-    A.META_MAJR            = B.META_MAJR,
-    A.META_MAJR_DESC       = B.META_MAJR_DESC,
     A.STU_CONCENT          = B.STU_CONCENT,
     A.CONCENT_DESC         = B.CONCENT_DESC,
     A.STU_PROG             = B.STU_PROG,
@@ -379,12 +203,9 @@ WHEN MATCHED THEN
     A.STU_RACE             = B.STU_RACE,
     A.STU_RACE_DESC        = B.STU_RACE_DESC,
     A.STU_ETHNICITY        = B.STU_ETHNICITY,
-    A.STU_AGE              = B.STU_AGE,
-    A.STU_PELL_IND         = B.STU_PELL_IND,
-    A.STU_FIRST_GENERATION = B.STU_FIRST_GENERATION
+    A.STU_AGE              = B.STU_AGE
   WHERE
     NVL(A.PANTHERID, 0) != NVL(B.PANTHERID, 0) OR
-    NVL(A.WHKEY, 0) != NVL(B.WHKEY, 0) OR
     NVL(A.STU_ENROLLED_TERM, 0) != NVL(B.STU_ENROLLED_TERM, 0) OR
     NVL(A.STU_COLG, 0) != NVL(B.STU_COLG, 0) OR
     NVL(A.COLG_DESC, 0) != NVL(B.COLG_DESC, 0) OR
@@ -394,8 +215,6 @@ WHEN MATCHED THEN
     NVL(A.DEGR_DESC, 0) != NVL(B.DEGR_DESC, 0) OR
     NVL(A.STU_MAJR, 0) != NVL(B.STU_MAJR, 0) OR
     NVL(A.MAJR_DESC, 0) != NVL(B.MAJR_DESC, 0) OR
-    NVL(A.META_MAJR, 0) != NVL(B.META_MAJR, 0) OR
-    NVL(A.META_MAJR_DESC, 0) != NVL(B.META_MAJR_DESC, 0) OR
     NVL(A.STU_CONCENT, 0) != NVL(B.STU_CONCENT, 0) OR
     NVL(A.CONCENT_DESC, 0) != NVL(B.CONCENT_DESC, 0) OR
     NVL(A.STU_PROG, 0) != NVL(B.STU_PROG, 0) OR
@@ -411,9 +230,7 @@ WHEN MATCHED THEN
     NVL(A.STU_RACE, 0) != NVL(B.STU_RACE, 0) OR
     NVL(A.STU_RACE_DESC, 0) != NVL(B.STU_RACE_DESC, 0) OR
     NVL(A.STU_ETHNICITY, 0) != NVL(B.STU_ETHNICITY, 0) OR
-    NVL(A.STU_AGE, 0) != NVL(B.STU_AGE, 0) OR
-    NVL(A.STU_PELL_IND, 0) != NVL(B.STU_PELL_IND, 0) OR
-    NVL(A.STU_FIRST_GENERATION, 0) != NVL(B.STU_FIRST_GENERATION, 0)
+    NVL(A.STU_AGE, 0) != NVL(B.STU_AGE, 0)
 ;
 
 COMMIT;
