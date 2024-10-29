@@ -1,4 +1,3 @@
-userid=/@BIPROD
 direct=true
 control=./src/ETL/SSOUSER.ctl
 log=./var/log/SSOUSER.sqlldr.log
