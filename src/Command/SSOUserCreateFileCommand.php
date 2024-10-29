@@ -6,20 +6,17 @@ namespace Gsu\Biprod\Command;
 
 use Gadget\LDAP\Connection;
 use Gadget\LDAP\Query;
-use Gadget\Log\LoggerProxyInterface;
-use Gadget\Log\LoggerProxyTrait;
 use Gsu\Biprod\Entity\SSOUser;
 use Gsu\Biprod\Factory\SSOUserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand('ssouser:create-file')]
-final class SSOUserCreateFileCommand extends Command implements LoggerProxyInterface
+final class SSOUserCreateFileCommand extends Command
 {
-    use LoggerProxyTrait;
-
     private string $base = 'OU=People,OU=Org,DC=gsuad,DC=gsu,DC=edu';
     /** @var string[] $filter */
     private array $filter = [];
@@ -51,11 +48,19 @@ final class SSOUserCreateFileCommand extends Command implements LoggerProxyInter
 
 
     /** @inheritdoc */
+    protected function configure(): void
+    {
+        $this->addArgument('data_file', InputArgument::REQUIRED);
+    }
+
+
+    /** @inheritdoc */
     protected function execute(
         InputInterface $input,
         OutputInterface $output
     ): int {
-        $dataFilePath = dirname(__DIR__, 2) . '/var/sqlldr/SSOUSER.dat';
+        /** @var string $dataFilePath */
+        $dataFilePath = $input->getArgument('data_file');
 
         $dataFile = fopen($dataFilePath, 'w');
         if (!is_resource($dataFile)) {
@@ -73,7 +78,7 @@ final class SSOUserCreateFileCommand extends Command implements LoggerProxyInter
                 $recordCount++;
             }
 
-            $this->info("{$recordCount} users fetched");
+            $output->writeln("{$recordCount} users fetched");
         } finally {
             fclose($dataFile);
         }
