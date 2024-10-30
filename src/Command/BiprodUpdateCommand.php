@@ -62,9 +62,9 @@ final class BiprodUpdateCommand extends ShellCommand
     ): ProcessShellOutput {
         return $this->output ?? new ProcessShellOutput(function (string $type, string $message) use ($output): void {
             $message = trim($message);
-            $output->writeln($message);
+            $this->info($message);
             if ($type === ProcessShell::START || $type === ProcessShell::TERMINATE) {
-                $this->info($message);
+                $output->writeln($message);
             }
         });
     }
