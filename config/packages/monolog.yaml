@@ -8,13 +8,15 @@ services:
     autoconfigure: true
   monolog.formatter.main:
     class: Gadget\Log\Monolog\Formatter\ConsoleLogFormatter
+    arguments:
+        $includeCommand: false
 
 monolog:
   channels:
     - deprecation
   handlers:
     main:
-      type: stream
+      type: rotating_file
       path: '%env(string:default:log_path:LOG_PATH)%'
       level: '%env(string:default:log_level:LOG_LEVEL)%'
       formatter: monolog.formatter.main
