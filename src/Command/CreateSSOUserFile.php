@@ -14,8 +14,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand('ssouser:create-file')]
-final class SSOUserCreateFileCommand extends Command
+#[AsCommand('biprod:create-ssouser-file')]
+final class CreateSSOUserFile extends Command
 {
     private string $base = 'OU=People,OU=Org,DC=gsuad,DC=gsu,DC=edu';
     /** @var string[] $filter */
