@@ -11,5 +11,3 @@ then
   >&2 echo 'Symfony Runtime is missing. Try running "composer require symfony/runtime".'
   exit 1
 fi
-
-export DBNAME=BIPROD
