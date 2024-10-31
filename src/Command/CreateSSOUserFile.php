@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Gsu\Biprod\Command;
 
+use Gadget\Console\Command\Command;
 use Gadget\LDAP\Connection;
 use Gadget\LDAP\Query;
 use Gsu\Biprod\Entity\SSOUser;
 use Gsu\Biprod\Factory\SSOUserFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

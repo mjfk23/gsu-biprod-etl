@@ -22,6 +22,3 @@ services:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
-  Gsu\Biprod\Factory\ShellCommandFactory:
-    arguments:
-      $dbname: '%env(string:default::APP_DBNAME)%'

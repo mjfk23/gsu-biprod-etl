@@ -5,55 +5,31 @@ declare(strict_types=1);
 namespace Gsu\Biprod\Command;
 
 use Gadget\Console\Command\ShellCommand;
-use Gadget\Console\Shell\ProcessShell;
-use Gadget\Console\Shell\ProcessShellArgs;
-use Gadget\Console\Shell\ProcessShellEnv;
-use Gadget\Console\Shell\ProcessShellOutput;
-use Gsu\Biprod\Factory\ShellCommandFactory;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class Biprod extends ShellCommand
 {
+    protected const string CONSOLE = './bin/console';
+    protected const string ETL_DIR = './src/ETL/';
+    protected const string DAT_DIR = './var/sqlldr/';
+
+
     /**
-     * @param ShellCommandFactory $shellCommandFactory
+     * @param string $parFile
+     * @param string $datFile
+     * @return string[]
      */
-    public function __construct(protected ShellCommandFactory $shellCommandFactory)
+    protected function sqlldr(string $parFile, string $datFile): array
     {
-        parent::__construct();
-    }
-
-
-    /** @inheritdoc */
-    protected function getEnv(
-        InputInterface $input,
-        OutputInterface $output
-    ): ProcessShellEnv {
-        return new ProcessShellEnv(
-            array_filter([
-                'ORACLE_HOME' => $_ENV['ORACLE_HOME'] ?? $_SERVER['ORACLE_HOME'] ?? null,
-                'TNS_ADMIN' => $_ENV['TNS_ADMIN'] ?? $_SERVER['TNS_ADMIN'] ?? null,
-            ]),
-            dirname(__DIR__, 2)
-        );
+        return [self::CONSOLE, 'oracle:sqlldr', self::ETL_DIR . $parFile, self::DAT_DIR . $datFile];
     }
 
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return ProcessShellOutput
+     * @param string $sqlFile
+     * @return string[]
      */
-    protected function getOutput(
-        InputInterface $input,
-        OutputInterface $output
-    ): ProcessShellOutput {
-        return $this->output ?? new ProcessShellOutput(function (string $type, string $message) use ($output): void {
-            $message = trim($message);
-            $this->info($message);
-            if ($type === ProcessShell::START || $type === ProcessShell::TERMINATE) {
-                $output->writeln($message);
-            }
-        });
+    protected function sqlplus(string $sqlFile): array
+    {
+        return [self::CONSOLE, 'oracle:sqlplus', self::ETL_DIR . $sqlFile];
     }
 }
