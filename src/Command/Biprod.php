@@ -8,9 +8,12 @@ use Gadget\Console\Command\ShellCommand;
 
 abstract class Biprod extends ShellCommand
 {
-    protected const string CONSOLE = './bin/console';
-    protected const string ETL_DIR = './src/ETL/';
-    protected const string DAT_DIR = './var/sqlldr/';
+    /** @var string */
+    protected const CONSOLE = './bin/console';
+    /** @var string */
+    protected const ETL_DIR = './src/ETL/';
+    /** @var string */
+    protected const DAT_DIR = './var/sqlldr/';
 
 
     /**
