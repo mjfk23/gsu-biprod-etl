@@ -396,16 +396,16 @@
         },
         {
             "name": "mjfk23/gadget-console",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mjfk23/gadget-console.git",
-                "reference": "bdac923f2eead855194be7e73d236b2fccb6fbbe"
+                "reference": "d65805464b95ec4224a416bc4bb6eb85a3bf75b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mjfk23/gadget-console/zipball/bdac923f2eead855194be7e73d236b2fccb6fbbe",
-                "reference": "bdac923f2eead855194be7e73d236b2fccb6fbbe",
+                "url": "https://api.github.com/repos/mjfk23/gadget-console/zipball/d65805464b95ec4224a416bc4bb6eb85a3bf75b0",
+                "reference": "d65805464b95ec4224a416bc4bb6eb85a3bf75b0",
                 "shasum": ""
             },
             "require": {
@@ -447,7 +447,7 @@
                 "source": "https://github.com/mjfk23/gadget-console",
                 "wiki": "https://github.com/mjfk23/gadget-console/wiki"
             },
-            "time": "2024-10-31T18:44:18+00:00"
+            "time": "2024-10-31T19:12:55+00:00"
         },
         {
             "name": "mjfk23/gadget-core",
