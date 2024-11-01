@@ -78,7 +78,7 @@ final class CreateSSOUserFile extends Command
                 $recordCount++;
             }
 
-            $output->writeln("{$recordCount} users fetched");
+            $this->info("{$recordCount} users fetched");
         } finally {
             fclose($dataFile);
         }
